@@ -5,10 +5,10 @@ import com.gerenciamentodeponto.controle.exception.CompanyNotFoundException;
 import com.gerenciamentodeponto.controle.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.openmbean.CompositeData;
 import java.util.List;
 
 @RestController
@@ -42,12 +42,16 @@ public class CompanyController {
         return new ResponseEntity<>(service.replace(dto), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Long id) throws CompanyNotFoundException {
         service.delete(id);
     }
 
+    @GetMapping("/cnpj/{cnpj}")
+    public ResponseEntity<CompanyDTO> findByCNPJ(@PathVariable String cnpj) {
+        return new ResponseEntity<>(service.findByCNPJ(cnpj), HttpStatus.ACCEPTED);
+    }
 
 
 

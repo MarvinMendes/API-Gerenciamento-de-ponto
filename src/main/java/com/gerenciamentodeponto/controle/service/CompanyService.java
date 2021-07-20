@@ -52,13 +52,19 @@ public class CompanyService {
         return create(Mapper.toDTO(dto));
     }
 
-    private Company findById(Long id) throws CompanyNotFoundException {
-        return repository.findById(id).orElseThrow(() -> new CompanyNotFoundException(id));
+    @Transactional(readOnly = true)
+    public CompanyDTO findByCNPJ(String cnpj) {
+        Company companyByCnpj = repository.findCompanyByCnpj(cnpj);
+        return Mapper.toDTO(companyByCnpj);
     }
 
     @Transactional
     public void delete(Long id) throws CompanyNotFoundException {
         Company companyForDelete = findById(id);
         repository.delete(companyForDelete);
+    }
+
+    private Company findById(Long id) throws CompanyNotFoundException {
+        return repository.findById(id).orElseThrow(() -> new CompanyNotFoundException(id));
     }
 }
